@@ -1,3 +1,3 @@
 flask
-sql-alchemy
+sqlalchemy
 flask-login
