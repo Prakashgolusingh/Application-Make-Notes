@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>
+    {% block title %} Base  {%endblock%}
+  </title>
+      
+  <link href="{{ url_for('static', filename='bootstrap.min.css')}}" rel="stylesheet">
+
+  <script src="{{ url_for('static', filename='bootstrap.min.js')}}" ></script>
+
+  <script src="{{url_for('static', filename='index.js')}}" rel="stylesheet"></script>
+
+  <script>
+    // Wait for the DOM to be fully loaded
+    document.addEventListener("DOMContentLoaded", function () {
+      const alertsContainer = document.getElementById("alerts-container");
+      const alertElements = alertsContainer.querySelectorAll(".alert");
+  
+      // Function to close an individual alert
+      function closeAlert(alert) {
+        alert.classList.add("fade");
+        setTimeout(() => {
+          alert.remove();
+        }, 1000); // Remove the alert after the fade-out animation
+      }
+  
+      // Close each alert after 2 seconds (2000 milliseconds)
+      alertElements.forEach((alertElement) => {
+        setTimeout(() => closeAlert(alertElement), 2000);
+      });
+    });
+  </script>
+  
+
+</head>
+<body>
+  <nav class="navbar navbar-expand-md navbar-dark bg-dark">
+    <div class="container-fluid">
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarText">
+        <ul class="navbar-nav mb-2 mb-lg-0">
+          {% if user.is_authenticated %}
+          <li class="nav-item">
+            <a class="nav-link active" aria-current="page" href="/">Home</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link active" href="/logout">LogOut</a>
+          </li>
+          {% else %}
+          <li class="nav-item">
+            <a class="nav-link active" href="/login">Login</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link active" href="/signUp">Sign Up</a>
+          </li>
+          {% endif %}
+        </ul>
+      </div>
+    </div>
+  </nav>
+  {% with messages = get_flashed_messages(with_categories=true) %}
+  {% if messages %}
+    <div id="alerts-container">
+      {% for category, message in messages %}
+        {% if category=='error' %}
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+          {{ message }}
+          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        {% else %}
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+          {{ message }}
+          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        {% endif %}
+      {% endfor %}
+    </div>
+  {% endif %}
+{% endwith %}
+
+  <div class="container"> 
+  {% block content%}
+    
+  {% endblock %} 
+  </div>
+</body>
+</html>
