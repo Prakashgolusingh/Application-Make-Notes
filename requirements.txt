@@ -1,4 +1,4 @@
 flask
-sql-alchemy
+SQLAlchemy
 flask-login
 gunicorn
